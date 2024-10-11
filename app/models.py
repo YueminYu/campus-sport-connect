@@ -19,3 +19,5 @@ class Event(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
+
+    user = db.relationship('User', backref='created_events')
