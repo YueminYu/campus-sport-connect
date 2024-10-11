@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
@@ -13,3 +13,12 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+    
+class CreateEventForm(FlaskForm):
+    sport_type = StringField('Sport Type', validators=[DataRequired()])
+    date = StringField('Date', validators=[DataRequired()])
+    time = StringField('Time', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired()])
+    max_participants = IntegerField('Max Participants', validators=[DataRequired()])
+    submit = SubmitField('Create Event')
+    
