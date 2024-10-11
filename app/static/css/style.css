@@ -1,14 +1,63 @@
+/* General Styling */
 body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
-
-h1 {
-    color: #343a40;
-    text-align: center;
-    margin-top: 50px;
+    background: linear-gradient(135deg, #e09, #fff); /* Apply a gradient background */
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
     padding: 20px;
+    flex-grow: 1;
+}
+
+/* Hero Section */
+.hero-section {
+    background-image: url('{{ url_for('static', filename='images/sports-bg.jpg') }}'); /* Replace with your background image */
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-section .overlay {
+    /* Remove or comment out the overlay to remove the shade */
+    /* background-color: rgba(0, 0, 0, 0.5); */
+}
+
+.hero-section h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.hero-section p {
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+/* Footer */
+.footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+footer a:hover {
+    color: #ff6f61;
 }
