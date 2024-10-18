@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
@@ -29,3 +29,8 @@ class CreateEventForm(FlaskForm):
     max_participants = IntegerField('Max Participants', validators=[DataRequired()])
     submit = SubmitField('Create Event')
     
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    sports = SelectMultipleField('Sports Interested', choices=[('basketball', 'Basketball'), ('football', 'Football'), ('soccer', 'Soccer'), ('badminton', 'Badminton')])
+    submit = SubmitField('Update Profile')

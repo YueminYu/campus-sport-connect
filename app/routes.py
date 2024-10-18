@@ -56,3 +56,8 @@ def create_event():
         flash('Your event has been created!', 'success')
         return redirect(url_for('main_routes.home'))
     return render_template('create_event.html', form=form)
+
+@main_routes.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
