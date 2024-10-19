@@ -6,7 +6,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    preferred_sport = db.Column(db.String(50), nullable=True)
+    preferred_sport = db.Column(db.String(200), nullable = True)
 
     events = db.relationship('Event', backref='creator', lazy=True)
 
