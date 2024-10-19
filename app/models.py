@@ -1,4 +1,4 @@
-from . import db
+from . import db, bcrypt
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
@@ -6,9 +6,17 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    preferred_sport = db.Column(db.String(200), nullable = True)
+    preferred_sport = db.Column(db.String(200), nullable=True)
 
-    events = db.relationship('Event', backref='creator', lazy=True)
+    def set_password(self, password):
+        """Hashes the password before storing it."""
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def check_password(self, password):
+        """Checks the password hash to verify the password."""
+        return bcrypt.check_password_hash(self.password, password)
+    # Use back_populates instead of backref for explicit control
+    events = db.relationship('Event', back_populates='creator', lazy=True)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,4 +28,5 @@ class Event(db.Model):
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
 
-    user = db.relationship('User', backref='created_events')
+    # Use back_populates to explicitly link back to the User model
+    creator = db.relationship('User', back_populates='events')
