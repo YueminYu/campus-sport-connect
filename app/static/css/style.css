@@ -1,6 +1,6 @@
 /* General Styling */
 body {
-    background: linear-gradient(135deg, #e09, #fff); /* Apply a gradient background */
+    background-color: #00274C; /* Fallback UIUC blue */
     font-family: 'Roboto', sans-serif;
     margin: 0;
     display: flex;
@@ -15,49 +15,41 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background-image: url('{{ url_for('static', filename='images/sports-bg.jpg') }}'); /* Replace with your background image */
+    background-image: url("/static/images/UIUC_Court.png"); /* Ensure the path is correct */
     background-size: cover;
     background-position: center;
-    height: 60vh;
-    position: relative;
+    background-repeat: no-repeat;
+    min-height: 100vh; /* Ensure it covers the entire viewport */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-.hero-section .overlay {
-    /* Remove or comment out the overlay to remove the shade */
-    /* background-color: rgba(0, 0, 0, 0.5); */
-}
-
+/* Hero Section Titles */
 .hero-section h1 {
-    font-size: 4rem;
-    font-weight: bold;
-    color: #ffffff;
+    font-size: 4.5rem;
+    font-weight: 700; /* Bold */
+    color:#FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Subtle shadow for contrast */
+    margin-bottom: 10px;
 }
 
 .hero-section p {
-    font-size: 1.5rem;
-    color: #ffffff;
+    font-size: 1.7rem;
+    font-weight: 400;
+    color: hsl(0, 0%, 96%);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow */
 }
+
 
 /* Footer */
 .footer {
-    background-color: #343a40;
+    background-color: rgba(0, 0, 0, 0.7); /* Slight transparency */
     color: #ffffff;
     text-align: center;
     padding: 20px 0;
     width: 100%;
-    position: relative;
+    position: absolute;
     bottom: 0;
-}
-
-footer a {
-    color: #ffffff;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-footer a:hover {
-    color: #ff6f61;
 }
