@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Event - Campus Sports Connect{% endblock %}
+
+{% block content %}
+<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 10px;">
+    <h2 class="text-center" style="color: #00274C;">Create a New Event</h2>
+    <form method="POST" action="{{ url_for('main_routes.create_event') }}">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.sport_type.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.sport_type(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.date.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.date(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.time.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.time(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.location.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.location(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.max_participants.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.max_participants(class="form-control") }}
+        </div>
+        <div class="text-center">
+            {{ form.submit(class="btn btn-primary btn-lg") }}
+        </div>
+    </form>
+    <div class="text-center mt-3">
+        <a href="{{ url_for('main_routes.home') }}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}
