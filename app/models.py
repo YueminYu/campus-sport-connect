@@ -15,18 +15,19 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         """Checks the password hash to verify the password."""
         return bcrypt.check_password_hash(self.password, password)
-    # Use back_populates instead of backref for explicit control
+
+    # Relationship to events
     events = db.relationship('Event', back_populates='creator', lazy=True)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     sport_type = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(20), nullable=False)
     time = db.Column(db.String(20), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
 
-    # Use back_populates to explicitly link back to the User model
+    # Relationship to link Event with User
     creator = db.relationship('User', back_populates='events')
