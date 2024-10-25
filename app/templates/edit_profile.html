@@ -3,24 +3,67 @@
 {% block title %}Edit Profile - Campus Sports Connect{% endblock %}
 
 {% block content %}
-<div class="container profile-container mt-5">
-    <h2 class="text-center">Edit Profile</h2>
+<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 10px;">
+    <h2 class="text-center" style="color: #00274C;">Edit Profile</h2>
+    
+    <!-- Display User Avatar -->
+    <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='images/default-avatar.jpg') }}" 
+             alt="User Avatar" 
+             class="profile-avatar mb-3" 
+             style="border-radius: 50%; width: 120px; height: 120px;">
+    </div>
+
     <form method="POST" action="{{ url_for('main_routes.edit_profile') }}">
         {{ form.hidden_tag() }}
 
         <div class="mb-3">
-            {{ form.username.label(class="form-label") }}
+            {{ form.username.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.username(class="form-control") }}
         </div>
+
         <div class="mb-3">
-            {{ form.email.label(class="form-label") }}
+            {{ form.email.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.email(class="form-control") }}
         </div>
+
+        <!-- Sports Interested Section -->
         <div class="mb-3">
-            {{ form.sports.label(class="form-label") }}
-            {{ form.sports(class="form-control") }}
+            <label class="form-label" style="color: #00274C; font-weight: bold;">Sports Interested</label>
+            <div class="form-check">
+                {{ form.basketball(class="form-check-input") }}
+                <label class="form-check-label">Basketball</label>
+            </div>
+            <div class="form-check">
+                {{ form.football(class="form-check-input") }}
+                <label class="form-check-label">Football</label>
+            </div>
+            <div class="form-check">
+                {{ form.soccer(class="form-check-input") }}
+                <label class="form-check-label">Soccer</label>
+            </div>
+            <div class="form-check">
+                {{ form.badminton(class="form-check-input") }}
+                <label class="form-check-label">Badminton</label>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Update Profile</button>
+
+        <!-- Password Update Section -->
+        <h4 class="text-center mt-4" style="color: #00274C;">Change Password</h4>
+        <div class="mb-3">
+            {{ form.current_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.current_password(class="form-control", placeholder="Enter current password") }}
+        </div>
+        <div class="mb-3">
+            {{ form.new_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.new_password(class="form-control", placeholder="Enter new password") }}
+        </div>
+        <div class="mb-3">
+            {{ form.confirm_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.confirm_password(class="form-control", placeholder="Confirm new password") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Update Profile</button>
     </form>
 </div>
 {% endblock %}

@@ -62,37 +62,47 @@ def profile():
     return render_template('profile.html', current_user=current_user)
 
 @main_routes.route('/edit_profile', methods=['GET', 'POST'])
-@login_required  # Ensure only logged-in users can access this route
+@login_required
 def edit_profile():
     form = EditProfileForm()
-
     if form.validate_on_submit():
-        # Update user data from the form inputs
+        # Update sports preferences based on checkboxes
+        sports_selected = []
+        if form.basketball.data:
+            sports_selected.append('Basketball')
+        if form.football.data:
+            sports_selected.append('Football')
+        if form.soccer.data:
+            sports_selected.append('Soccer')
+        if form.badminton.data:
+            sports_selected.append('Badminton')
+        
+        # Storing sports in the singular 'preferred_sport' field in the User model
+        current_user.preferred_sport = ', '.join(sports_selected)
+        
+        # Handle password change if needed
+        if form.new_password.data:
+            current_user.set_password(form.new_password.data)
+        
+        # Save other profile changes
         current_user.username = form.username.data
         current_user.email = form.email.data
-
-        # Convert the list of sports to a comma-separated string before saving
-        current_user.preferred_sport = ','.join(form.sports.data)
-
-        # Commit the changes to the database
+        
+        # Save the updated user information
         db.session.commit()
-
-        # Flash success message and redirect to profile page
         flash('Your profile has been updated!', 'success')
-        return redirect(url_for('main_routes.profile'))
-
+        return redirect(url_for('profile'))
+    
+    # Populate the form with the current user's data
     elif request.method == 'GET':
-        # Populate the form fields with the current user’s data
         form.username.data = current_user.username
         form.email.data = current_user.email
-
-        # Convert the stored comma-separated string back into a list for the form
-        form.sports.data = (
-            current_user.preferred_sport.split(',') 
-            if current_user.preferred_sport else []
-        )
-
-    # Render the edit profile template with the form
+        # Load current preferred sports into the checkboxes
+        form.basketball.data = 'Basketball' in current_user.preferred_sport
+        form.football.data = 'Football' in current_user.preferred_sport
+        form.soccer.data = 'Soccer' in current_user.preferred_sport
+        form.badminton.data = 'Badminton' in current_user.preferred_sport
+    
     return render_template('edit_profile.html', form=form)
 
 @main_routes.route('/view_events', methods=['GET'])

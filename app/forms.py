@@ -32,5 +32,16 @@ class CreateEventForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    sports = SelectMultipleField('Sports Interested', choices=[('basketball', 'Basketball'), ('football', 'Football'), ('soccer', 'Soccer'), ('badminton', 'Badminton')])
+    
+    # Sports interested as BooleanFields
+    basketball = BooleanField('Basketball')
+    football = BooleanField('Football')
+    soccer = BooleanField('Soccer')
+    badminton = BooleanField('Badminton')
+
+    # For password change
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
+
     submit = SubmitField('Update Profile')

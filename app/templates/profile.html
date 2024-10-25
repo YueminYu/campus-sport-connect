@@ -3,24 +3,23 @@
 {% block title %}User Profile - Campus Sports Connect{% endblock %}
 
 {% block content %}
-<div class="container profile-container mt-5">
+<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.85); padding: 30px; border-radius: 10px;">
     <div class="profile-header">
-        <h2>User Profile</h2>
+        <h2 class="text-center" style="color: #00274C;">User Profile</h2>
     </div>
 
-    <div class="profile-info">
-        <img src="{{ url_for('static', filename='images/default-avatar.jpg') }}" 
-             alt="User Avatar" class="profile-avatar">
+    <div class="profile-info text-center">
+        <img src="{{ url_for('static', filename='images/default-avatar.jpg') }}" alt="User Avatar" class="profile-avatar mb-3" style="border-radius: 50%; width: 150px; height: 150px;">
         <div class="profile-details">
-            <h3>{{ current_user.username }}</h3>
+            <h3 style="color: #00274C;">{{ current_user.username }}</h3>
             <p><strong>Email:</strong> {{ current_user.email }}</p>
-            <p><strong>Sports Interested:</strong> {{ current_user.preferred_sport}}</p>
+            <p><strong>Sports Interested:</strong> {{ current_user.preferred_sport }}</p>
         </div>
     </div>
 
-    <div class="btn-group">
-        <a href="{{ url_for('main_routes.edit_profile') }}" class="btn btn-warning">Edit Profile</a>
-        <a href="{{ url_for('main_routes.view_events') }}" class="btn btn-primary">View My Events</a>
+    <div class="btn-group d-flex justify-content-center mt-3">
+        <a href="{{ url_for('main_routes.edit_profile') }}" class="btn btn-warning mx-2">Edit Profile</a>
+        <a href="{{ url_for('main_routes.view_events') }}" class="btn btn-primary mx-2">View My Events</a>
     </div>
 </div>
 {% endblock %}

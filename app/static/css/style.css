@@ -1,16 +1,17 @@
 /* General Styling */
 body {
-    background-color: #00274C; /* Fallback UIUC blue */
+    background-color: #00274C; /* UIUC blue */
     font-family: 'Roboto', sans-serif;
     margin: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh; /* Full viewport height */
 }
 
+/* Ensure the main container grows to push footer down */
 .container {
+    flex-grow: 1; /* Push footer to bottom */
     padding: 20px;
-    flex-grow: 1;
 }
 
 /* Hero Section */
@@ -43,13 +44,13 @@ body {
 }
 
 
-/* Footer */
+/* Footer always sticks to the bottom */
 .footer {
     background-color: rgba(0, 0, 0, 0.7); /* Slight transparency */
     color: #ffffff;
     text-align: center;
     padding: 20px 0;
     width: 100%;
-    position: absolute;
+    position: relative;
     bottom: 0;
 }
