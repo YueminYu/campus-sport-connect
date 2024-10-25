@@ -49,7 +49,7 @@ def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
         event = Event(sport_type=form.sport_type.data, date=form.date.data, time=form.time.data,
-                      location=form.location.data, created_by=current_user.id, max_participants=form.max_participants.data)
+                      location=form.location.data, user_id=current_user.id, max_participants=form.max_participants.data)
         db.session.add(event)
         db.session.commit()
         flash('Your event has been created!', 'success')
@@ -98,15 +98,15 @@ def edit_profile():
         form.username.data = current_user.username
         form.email.data = current_user.email
         # Load current preferred sports into the checkboxes
-        form.basketball.data = 'Basketball' in current_user.preferred_sport
-        form.football.data = 'Football' in current_user.preferred_sport
-        form.soccer.data = 'Soccer' in current_user.preferred_sport
-        form.badminton.data = 'Badminton' in current_user.preferred_sport
+        form.basketball.data = 'Basketball' in (current_user.preferred_sport or '')
+        form.football.data = 'Football' in (current_user.preferred_sport or '')
+        form.soccer.data = 'Soccer' in (current_user.preferred_sport or '')
+        form.badminton.data = 'Badminton' in (current_user.preferred_sport or '')
     
     return render_template('edit_profile.html', form=form)
 
 @main_routes.route('/view_events', methods=['GET'])
 def view_events():
     # Fetch and display events specific to the user or general events
-    events = Event.query.filter_by(created_by=current_user.id).all()
+    events = Event.query.filter_by(user_id=current_user.id).all()
     return render_template('view_events.html', events=events)
