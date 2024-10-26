@@ -3,7 +3,9 @@
 {% block title %}Edit Profile - Campus Sports Connect{% endblock %}
 
 {% block content %}
-<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 10px;">
+<div class="container profile-container mt-5" 
+     style="max-width: 600px; background-color: rgba(255, 255, 255, 0.9); 
+     padding: 30px; border-radius: 10px;">
     <h2 class="text-center" style="color: #00274C;">Edit Profile</h2>
     
     <!-- Display User Avatar -->
@@ -48,22 +50,15 @@
             </div>
         </div>
 
-        <!-- Password Update Section -->
-        <h4 class="text-center mt-4" style="color: #00274C;">Change Password</h4>
-        <div class="mb-3">
-            {{ form.current_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.current_password(class="form-control", placeholder="Enter current password") }}
-        </div>
-        <div class="mb-3">
-            {{ form.new_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.new_password(class="form-control", placeholder="Enter new password") }}
-        </div>
-        <div class="mb-3">
-            {{ form.confirm_password.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.confirm_password(class="form-control", placeholder="Confirm new password") }}
-        </div>
-
         <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Update Profile</button>
     </form>
+
+    <!-- Link to Change Password Page -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('main_routes.change_password') }}" 
+           class="btn btn-link" style="color: #00274C; font-weight: bold;">
+            Change Password
+        </a>
+    </div>
 </div>
 {% endblock %}
