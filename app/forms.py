@@ -1,55 +1,99 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, SelectMultipleField
+from wtforms import (
+    StringField, PasswordField, SubmitField, BooleanField, IntegerField
+)
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    """Form for user registration."""
+    first_name = StringField(
+        'First Name', validators=[DataRequired()]
+    )
+    last_name = StringField(
+        'Last Name', validators=[DataRequired()]
+    )
+    username = StringField(
+        'Username', validators=[DataRequired(), Length(min=2, max=20)]
+    )
+    email = StringField(
+        'Email', validators=[DataRequired(), Email()]
+    )
+    password = PasswordField(
+        'Password', validators=[DataRequired()]
+    )
+    confirm_password = PasswordField(
+        'Confirm Password',
+        validators=[DataRequired(), EqualTo('password', message='Passwords must match.')]
+    )
+    
+    # Sports Interest as Boolean Fields
     basketball = BooleanField('Basketball')
     football = BooleanField('Football')
     soccer = BooleanField('Soccer')
-    badminton = BooleanField('Badminton')  # New Badminton field
+    badminton = BooleanField('Badminton')  # Newly added sport field
+
     submit = SubmitField('Sign Up')
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    """Form for user login."""
+    email = StringField(
+        'Email', validators=[DataRequired(), Email()]
+    )
+    password = PasswordField(
+        'Password', validators=[DataRequired()]
+    )
     submit = SubmitField('Login')
-    
+
+
 class CreateEventForm(FlaskForm):
-    sport_type = StringField('Sport Type', validators=[DataRequired()])
-    date = StringField('Date', validators=[DataRequired()])
-    time = StringField('Time', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
-    max_participants = IntegerField('Max Participants', validators=[DataRequired()])
+    """Form for creating a new event."""
+    sport_type = StringField(
+        'Sport Type', validators=[DataRequired()]
+    )
+    date = StringField(
+        'Date', validators=[DataRequired()]
+    )
+    time = StringField(
+        'Time', validators=[DataRequired()]
+    )
+    location = StringField(
+        'Location', validators=[DataRequired()]
+    )
+    max_participants = IntegerField(
+        'Max Participants', validators=[DataRequired()]
+    )
     submit = SubmitField('Create Event')
-    
+
+
 class EditProfileForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    
-    # Sports interested as BooleanFields
+    """Form for editing user profile."""
+    username = StringField(
+        'Username', validators=[DataRequired()]
+    )
+    email = StringField(
+        'Email', validators=[DataRequired(), Email()]
+    )
+
+    # Sports Interests as Boolean Fields
     basketball = BooleanField('Basketball')
     football = BooleanField('Football')
     soccer = BooleanField('Soccer')
     badminton = BooleanField('Badminton')
 
-    # For password change
-    # current_password = PasswordField('Current Password', validators=[DataRequired()])
-    # new_password = PasswordField('New Password', validators=[DataRequired()])
-    # confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
-
     submit = SubmitField('Update Profile')
-    
+
+
 class ChangePasswordForm(FlaskForm):
-    current_password = PasswordField('Current Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm New Password', validators=[
-        DataRequired(), EqualTo('new_password', message='Passwords must match.')
-    ])
+    """Form for changing user password."""
+    current_password = PasswordField(
+        'Current Password', validators=[DataRequired()]
+    )
+    new_password = PasswordField(
+        'New Password', validators=[DataRequired()]
+    )
+    confirm_password = PasswordField(
+        'Confirm New Password',
+        validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')]
+    )
     submit = SubmitField('Change Password')
