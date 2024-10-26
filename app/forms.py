@@ -40,8 +40,16 @@ class EditProfileForm(FlaskForm):
     badminton = BooleanField('Badminton')
 
     # For password change
-    current_password = PasswordField('Current Password', validators=[DataRequired()])
-    new_password = PasswordField('New Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
+    # current_password = PasswordField('Current Password', validators=[DataRequired()])
+    # new_password = PasswordField('New Password', validators=[DataRequired()])
+    # confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password', message='Passwords must match.')])
 
     submit = SubmitField('Update Profile')
+    
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm New Password', validators=[
+        DataRequired(), EqualTo('new_password', message='Passwords must match.')
+    ])
+    submit = SubmitField('Change Password')
