@@ -1,6 +1,11 @@
 from . import db, bcrypt
 from flask_login import UserMixin
 
+# Association table for users and events they joined
+participants = db.Table('participants',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
+)
 
 class User(db.Model, UserMixin):
     """Model for storing user information."""
@@ -10,8 +15,11 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     preferred_sport = db.Column(db.String(200), nullable=True)
 
-    # Relationship to events
+    # Relationship to events created by the user
     events = db.relationship('Event', back_populates='creator', lazy=True)
+
+    # Relationship to events the user has joined
+    joined_events = db.relationship('Event', secondary=participants, back_populates='participants')
 
     def set_password(self, password):
         """Hashes the password before storing it."""
@@ -33,5 +41,8 @@ class Event(db.Model):
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
 
-    # Relationship to link Event with User
+    # Relationship to link Event with its creator
     creator = db.relationship('User', back_populates='events')
+
+    # Relationship to link Event with participants
+    participants = db.relationship('User', secondary=participants, back_populates='joined_events')
