@@ -54,3 +54,13 @@ body {
     position: relative;
     bottom: 0;
 }
+
+/* Style for events created by the current user */
+.card.border-primary {
+    border: 2px solid #007bff;
+}
+
+/* Style for events created by other users */
+.card.border-secondary {
+    border: 1px solid #6c757d;
+}

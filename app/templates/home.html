@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block hero %}
+{% if not current_user.is_authenticated %}
+<div class="hero-section d-flex align-items-center justify-content-center" style="background-color: #00274C; height: 75vh;">
+    <div class="container text-center text-white">
+        <h1 class="display-4">Welcome to Campus Sports Connect</h1>
+        <p class="lead">Join and organize sports events at UIUC.</p>
+        <a href="{{ url_for('main_routes.register') }}" class="btn btn-primary btn-lg me-2">Sign Up</a>
+        <a href="{{ url_for('main_routes.login') }}" class="btn btn-secondary btn-lg">Login</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if current_user.is_authenticated %}
+        <h2 class="text-center text-white mb-4">All Events</h2>
+        
+        <!-- My Events Section -->
+        <h3 class="text-center text-white mb-3">My Events</h3>
+        <div class="row">
+            {% for event in events if event.user_id == current_user.id %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100" style="background-color: rgba(255, 255, 255, 0.9);">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.sport_type }}</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> {{ event.date }}<br>
+                                <strong>Time:</strong> {{ event.time }}<br>
+                                <strong>Location:</strong> {{ event.location }}<br>
+                                <strong>Participants:</strong> {{ event.current_participants }}/{{ event.max_participants }}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('main_routes.edit_event', event_id=event.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form method="POST" action="{{ url_for('main_routes.delete_event', event_id=event.id) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Other Users' Events Section -->
+        <h3 class="text-center text-white mb-3">Other Events</h3>
+        <div class="row">
+            {% for event in events if event.user_id != current_user.id %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100" style="background-color: rgba(255, 255, 255, 0.9);">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.sport_type }}</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> {{ event.date }}<br>
+                                <strong>Time:</strong> {{ event.time }}<br>
+                                <strong>Location:</strong> {{ event.location }}<br>
+                                <strong>Participants:</strong> {{ event.current_participants }}/{{ event.max_participants }}
+                            </p>
+                            <!-- Form for joining the event -->
+                            <form method="POST" action="{{ url_for('main_routes.join_event', event_id=event.id) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Join Event</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

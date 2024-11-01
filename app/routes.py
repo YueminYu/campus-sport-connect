@@ -15,7 +15,31 @@ main_routes = Blueprint('main_routes', __name__)
 
 @main_routes.route('/')
 def home():
-    return render_template('base.html')
+    # Fetch all events from the database
+    events = Event.query.all() if current_user.is_authenticated else []
+    return render_template('home.html', events=events)
+
+
+@main_routes.route('/join_event/<int:event_id>', methods=['POST'])
+@login_required
+def join_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    
+    # Ensure the user is not joining their own event
+    if event.user_id != current_user.id:
+        # Add the user to the event's participants
+        if current_user not in event.participants:
+            event.participants.append(current_user)
+            db.session.commit()
+            flash("You have joined the event!", "success")
+        else:
+            flash("You are already part of this event!", "info")
+    else:
+        flash("You cannot join your own event.", "warning")
+    
+    return redirect(url_for('main_routes.home'))
+
+
 
 
 @main_routes.route('/register', methods=['GET', 'POST'])
@@ -47,10 +71,11 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('main_routes.profile'))
+            return redirect(url_for('main_routes.home'))  # Redirect to home
         flash('Login failed. Please check your email and password.', 'danger')
 
     return render_template('login.html', form=form)
+
 
 
 @main_routes.route('/logout')
