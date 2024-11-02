@@ -46,3 +46,7 @@ class Event(db.Model):
 
     # Relationship to link Event with participants
     participants = db.relationship('User', secondary=participants, back_populates='joined_events')
+    
+    @property
+    def current_participants_count(self):
+        return len(self.participants)
