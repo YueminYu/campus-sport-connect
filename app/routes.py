@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, render_template, redirect, url_for, flash, request
+    Blueprint, render_template, redirect, url_for, flash, request, current_app
 )
 from . import db, bcrypt
 from .models import User, Event
@@ -10,6 +10,11 @@ from .forms import (
 from flask_login import (
     login_user, logout_user, login_required, current_user
 )
+
+import os
+import secrets
+from werkzeug.utils import secure_filename  
+import uuid 
 
 main_routes = Blueprint('main_routes', __name__)
 
@@ -103,12 +108,24 @@ def profile():
     return render_template('profile.html', current_user=current_user)
 
 
+from flask import current_app
+import os
+from werkzeug.utils import secure_filename
+import uuid
 @main_routes.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
-
     if form.validate_on_submit():
+        # Save avatar if uploaded
+        if form.avatar.data:
+            # Generate a unique filename to avoid overwriting
+            avatar_filename = f"{uuid.uuid4().hex}_{secure_filename(form.avatar.data.filename)}"
+            avatar_path = os.path.join(current_app.root_path, 'static/uploads/avatars', avatar_filename)
+            form.avatar.data.save(avatar_path)
+            current_user.avatar = f'uploads/avatars/{avatar_filename}'  # Save relative path in the database
+
+        # Handle sports interests
         sports_selected = []
         if form.basketball.data:
             sports_selected.append('Basketball')
@@ -119,15 +136,18 @@ def edit_profile():
         if form.badminton.data:
             sports_selected.append('Badminton')
 
+        # Update user information
         current_user.preferred_sport = ', '.join(sports_selected)
         current_user.username = form.username.data
         current_user.email = form.email.data
 
+        # Commit changes to the database
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('main_routes.profile'))
 
     elif request.method == 'GET':
+        # Pre-fill form fields
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.basketball.data = 'Basketball' in (current_user.preferred_sport or '')
@@ -136,7 +156,6 @@ def edit_profile():
         form.badminton.data = 'Badminton' in (current_user.preferred_sport or '')
 
     return render_template('edit_profile.html', form=form)
-
 
 @main_routes.route('/view_my_events', methods=['GET'])
 @login_required

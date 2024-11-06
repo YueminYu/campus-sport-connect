@@ -9,7 +9,9 @@
     </div>
 
     <div class="profile-info text-center">
-        <img src="{{ url_for('static', filename='images/default-avatar.jpg') }}" alt="User Avatar" class="profile-avatar mb-3" style="border-radius: 50%; width: 150px; height: 150px;">
+        <!-- Display avatar or default image -->
+        <img src="{{ url_for('static', filename=(current_user.avatar if current_user.avatar else 'images/default-avatar.jpg')) }}" 
+             alt="User Avatar" class="profile-avatar mb-3" style="border-radius: 50%; width: 150px; height: 150px;">
         <div class="profile-details">
             <h3 style="color: #00274C;">{{ current_user.username }}</h3>
             <p><strong>Email:</strong> {{ current_user.email }}</p>

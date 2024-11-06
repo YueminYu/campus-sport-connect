@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import (
-    StringField, PasswordField, SubmitField, BooleanField, IntegerField
+    StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField
 )
 from wtforms.validators import DataRequired, Email, EqualTo, Length
+from flask_wtf.file import FileAllowed
 
 class RegistrationForm(FlaskForm):
     """Form for user registration."""
@@ -74,7 +75,7 @@ class EditProfileForm(FlaskForm):
     email = StringField(
         'Email', validators=[DataRequired(), Email()]
     )
-
+    avatar = FileField('Upload Avatar', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     # Sports Interests as Boolean Fields
     basketball = BooleanField('Basketball')
     football = BooleanField('Football')
