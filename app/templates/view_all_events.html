@@ -11,9 +11,9 @@
     <h3 class="text-center text-white mb-3">My Events</h3>
     <div class="row">
         {% for event in events if event.user_id == current_user.id %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 fade-in">
                 <div class="card h-100" style="background-image: url('{{ url_for('static', filename='images/UIUC_court.png') }}'); background-size: cover;">
-                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8);">
+                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8); color: #000;">
                         <h5 class="card-title">{{ event.sport_type }}</h5>
                         <p class="card-text">
                             <strong>Date:</strong> {{ event.date }}<br>
@@ -43,9 +43,9 @@
     <h3 class="text-center text-white mb-3">Other Events</h3>
     <div class="row">
         {% for event in events if event.user_id != current_user.id %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 fade-in">
                 <div class="card h-100" style="background-image: url('{{ url_for('static', filename='images/UIUC_court.png') }}'); background-size: cover;">
-                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8);">
+                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8); color: #000;">
                         <h5 class="card-title">{{ event.sport_type }}</h5>
                         <p class="card-text">
                             <strong>Date:</strong> {{ event.date }}<br>

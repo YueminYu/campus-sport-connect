@@ -3,19 +3,19 @@
 {% block title %}User Profile - Campus Sports Connect{% endblock %}
 
 {% block content %}
-<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.85); padding: 30px; border-radius: 10px;">
+<div class="container profile-container mt-5 fade-in" 
+     style="max-width: 600px; background-color: rgba(255, 255, 255, 0.85); padding: 30px; border-radius: 10px; color: #000;">
     <div class="profile-header">
         <h2 class="text-center" style="color: #00274C;">User Profile</h2>
     </div>
 
     <div class="profile-info text-center">
-        <!-- Display avatar or default image -->
         <img src="{{ url_for('static', filename=(current_user.avatar if current_user.avatar else 'images/default-avatar.jpg')) }}" 
              alt="User Avatar" class="profile-avatar mb-3" style="border-radius: 50%; width: 150px; height: 150px;">
         <div class="profile-details">
             <h3 style="color: #00274C;">{{ current_user.username }}</h3>
-            <p><strong>Email:</strong> {{ current_user.email }}</p>
-            <p><strong>Sports Interested:</strong> {{ current_user.preferred_sport }}</p>
+            <p style="color: #000;"><strong>Email:</strong> {{ current_user.email }}</p>
+            <p style="color: #000;"><strong>Sports Interested:</strong> {{ current_user.preferred_sport }}</p>
         </div>
     </div>
 

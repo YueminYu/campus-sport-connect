@@ -3,12 +3,16 @@
 
 {% block hero %}
 {% if not current_user.is_authenticated %}
-<div class="hero-section d-flex align-items-center justify-content-center" style="background-color: #00274C; height: 75vh;">
-    <div class="container text-center text-white">
-        <h1 class="display-4">Welcome to Campus Sports Connect</h1>
-        <p class="lead">Join and organize sports events at UIUC.</p>
-        <a href="{{ url_for('main_routes.register') }}" class="btn btn-primary btn-lg me-2">Sign Up</a>
-        <a href="{{ url_for('main_routes.login') }}" class="btn btn-secondary btn-lg">Login</a>
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="title-gradient">Campus Sports Connect</h1>
+        <p class="subtitle">
+            Join and organize sports events on campus.<span class="typing-cursor"></span>
+        </p>
+        <div class="d-flex justify-content-center mt-4">
+            <a href="{{ url_for('main_routes.register') }}" class="btn btn-primary me-2">Sign Up</a>
+            <a href="{{ url_for('main_routes.login') }}" class="btn btn-secondary">Login</a>
+        </div>
     </div>
 </div>
 {% else %}
