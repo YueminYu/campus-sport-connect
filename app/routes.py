@@ -20,6 +20,19 @@ from .forms import (
 
 main_routes = Blueprint('main_routes', __name__)
 
+
+
+
+SPORT_BACKGROUND_IMAGES = {
+    'Badminton': 'images/badminton_court.png',
+    'Football': 'images/football_court.png',
+    'Soccer': 'images/soccer_court.png',
+    # Default option if no match
+    'default': 'images/background.png'
+}
+
+
+
 @main_routes.route('/')
 def home():
     """Render the home page."""
@@ -83,12 +96,17 @@ def logout():
     logout_user()
     return redirect(url_for('main_routes.login'))
 
+
+
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
-    """Create a new event and add the creator as a participant."""
     form = CreateEventForm()
     if form.validate_on_submit():
+        # Get the background image path from the form data
+        background_image = request.form.get("background_image", "images/background.png")
+        
+        # Create the event instance (excluding background_image from the database)
         event = Event(
             sport_type=form.sport_type.data,
             date=form.date.data,
@@ -98,12 +116,17 @@ def create_event():
             max_participants=form.max_participants.data
         )
         event.participants.append(current_user)
+
         db.session.add(event)
         db.session.commit()
-        flash('Your event has been created and you have been added as a participant!', 'success')
+        
+        # Flash a success message and redirect to the all events page
+        flash('Your event has been created!', 'success')
         return redirect(url_for('main_routes.view_all_events'))
 
     return render_template('create_event.html', form=form)
+
+
 
 @main_routes.route('/profile')
 @login_required

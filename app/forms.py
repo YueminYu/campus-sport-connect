@@ -4,7 +4,6 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_wtf.file import FileAllowed
-
 class RegistrationForm(FlaskForm):
     """Form for user registration."""
     first_name = StringField(
