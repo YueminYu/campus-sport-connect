@@ -1,7 +1,11 @@
-from . import db, bcrypt
-from flask_login import UserMixin
 
-# Association table for users and events they joined
+"""
+Models module defining database structures and relationships.
+"""
+
+from flask_login import UserMixin
+from . import db, bcrypt
+
 participants = db.Table('participants',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
