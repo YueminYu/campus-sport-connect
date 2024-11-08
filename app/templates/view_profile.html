@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s Profile - Campus Sports Connect{% endblock %}
+
+{% block content %}
+<div class="container profile-container mt-5" style="max-width: 600px; background-color: rgba(255, 255, 255, 0.85); padding: 30px; border-radius: 10px; color: #000;">
+    <h2 class="text-center" style="color: #00274C;">{{ user.username }}'s Profile</h2>
+
+    <div class="text-center mt-4">
+        {% if user.avatar %}
+            <img src="{{ url_for('static', filename=user.avatar) }}" alt="{{ user.username }}'s Avatar" style="border-radius: 50%; width: 150px; height: 150px;">
+        {% else %}
+            <img src="{{ url_for('static', filename='images/default-avatar.jpg') }}" alt="Default Avatar" style="border-radius: 50%; width: 150px; height: 150px;">
+        {% endif %}
+    </div>
+
+    <div class="mt-3">
+        <h4 class="text-center">{{ user.username }}</h4>
+        <p class="text-center" style="color: #666;">{{ user.email }}</p>
+        
+        {% if user.preferred_sport %}
+            <p class="text-center"><strong>Preferred Sports:</strong> {{ user.preferred_sport }}</p>
+        {% else %}
+            <p class="text-center"><em>No preferred sports listed.</em></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
