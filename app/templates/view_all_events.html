@@ -7,13 +7,21 @@
 <div class="container mt-5">
     <h2 class="text-center text-white mb-4">All Events</h2>
 
+    <!-- Dictionary for sport backgrounds -->
+    {% set background_images = {
+        "Badminton": "images/badminton_court.png",
+        "Football": "images/football_court.png",
+        "Soccer": "images/soccer_court.png",
+        "default": "images/background.png"
+    } %}
+
     <!-- My Events Section -->
     <h3 class="text-center text-white mb-3">My Events</h3>
     <div class="row">
         {% for event in events if event.user_id == current_user.id %}
             <div class="col-md-4 mb-4 fade-in">
-                <div class="card h-100" style="background-image: url('{{ url_for('static', filename='images/UIUC_court.png') }}'); background-size: cover;">
-                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8); color: #000000;">
+                <div class="card h-100" style="background-image: url('{{ url_for('static', filename=background_images.get(event.sport_type, background_images["default"])) }}'); background-size: cover;">
+                    <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8); color: #000;">
                         <h5 class="card-title">{{ event.sport_type }}</h5>
                         <p class="card-text">
                             <strong>Date:</strong> {{ event.date }}<br>
@@ -53,7 +61,7 @@
     <div class="row">
         {% for event in events if event.user_id != current_user.id %}
             <div class="col-md-4 mb-4 fade-in">
-                <div class="card h-100" style="background-image: url('{{ url_for('static', filename='images/UIUC_court.png') }}'); background-size: cover;">
+                <div class="card h-100" style="background-image: url('{{ url_for('static', filename=background_images.get(event.sport_type, background_images["default"])) }}'); background-size: cover;">
                     <div class="card-body" style="background-color: rgba(255, 255, 255, 0.8); color: #000;">
                         <h5 class="card-title">{{ event.sport_type }}</h5>
                         <p class="card-text">

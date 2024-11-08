@@ -1,3 +1,8 @@
+
+
+
+
+
 {% extends 'base.html' %}
 
 {% block title %}Create Event - Campus Sports Connect{% endblock %}
@@ -27,6 +32,18 @@
             {{ form.max_participants.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.max_participants(class="form-control") }}
         </div>
+
+        <!-- Background Selection Dropdown -->
+        <div class="mb-3">
+            <label for="backgroundSelect" class="form-label" style="color: #00274C; font-weight: bold;">Select Background</label>
+            <select id="backgroundSelect" class="form-control">
+                <option value="background.png">Default</option>
+                <option value="badminton_court.png">Badminton Court</option>
+                <option value="football_court.png">Football Court</option>
+                <option value="soccer_court.png">Soccer Court</option>
+            </select>
+        </div>
+
         <div class="text-center">
             {{ form.submit(class="btn btn-primary btn-lg") }}
         </div>
@@ -35,4 +52,21 @@
         <a href="{{ url_for('main_routes.home') }}" class="btn btn-secondary">Back to Home</a>
     </div>
 </div>
+
+
+
+
+<script>
+    // Add an event listener to the submit button
+    document.querySelector("form").addEventListener("submit", function(event) {
+        const eventName = document.querySelector("#form-sport_type").value; // Assumes sport_type is unique per event
+        const selectedBackground = document.getElementById("backgroundSelect").value;
+
+        if (eventName) {
+            localStorage.setItem(`event_background_${eventName}`, selectedBackground);
+        }
+    });
+</script>
+
+
 {% endblock %}
