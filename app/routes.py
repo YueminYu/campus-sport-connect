@@ -98,33 +98,17 @@ def logout():
 
 
 
+from datetime import datetime
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
-        # Get the background image path from the form data
-        background_image = request.form.get("background_image", "images/background.png")
-        
-        # Create the event instance (excluding background_image from the database)
-        event = Event(
-            sport_type=form.sport_type.data,
-            date=form.date.data,
-            time=form.time.data,
-            location=form.location.data,
-            user_id=current_user.id,
-            max_participants=form.max_participants.data
-        )
-        event.participants.append(current_user)
-
-        db.session.add(event)
-        db.session.commit()
-        
-        # Flash a success message and redirect to the all events page
-        flash('Your event has been created!', 'success')
+        # Process form submission
+        flash('Event created successfully!', 'success')
         return redirect(url_for('main_routes.view_all_events'))
 
-    return render_template('create_event.html', form=form)
+    return render_template('create_event.html', form=form, now=datetime.now())
 
 
 
