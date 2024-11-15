@@ -2,8 +2,16 @@ from flask_wtf import FlaskForm
 from wtforms import (
     StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField
 )
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
+from datetime import datetime
+from wtforms.fields import DateField, TimeField
+from wtforms import ValidationError
+from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField, SubmitField
+from wtforms.validators import DataRequired
+
 class RegistrationForm(FlaskForm):
     """Form for user registration."""
     first_name = StringField(
@@ -51,10 +59,10 @@ class CreateEventForm(FlaskForm):
     sport_type = StringField(
         'Sport Type', validators=[DataRequired()]
     )
-    date = StringField(
-        'Date', validators=[DataRequired()]
+    date = DateField(
+        'Date', format='%Y-%m-%d', validators=[DataRequired()]
     )
-    time = StringField(
+    time = TimeField(
         'Time', validators=[DataRequired()]
     )
     location = StringField(
@@ -65,6 +73,16 @@ class CreateEventForm(FlaskForm):
     )
     submit = SubmitField('Create Event')
 
+    def validate_date(form, field):
+        """Ensure the selected date is in the future."""
+        if field.data < datetime.today().date():
+            raise ValidationError("Date must be in the future.")
+
+    def validate_time(form, field):
+        """Optional: Custom validation for time."""
+        # Example: Ensure events aren't created outside of specific hours
+        if field.data and (field.data.hour < 8 or field.data.hour > 22):
+            raise ValidationError("Time must be between 08:00 and 22:00.")
 
 class EditProfileForm(FlaskForm):
     """Form for editing user profile."""

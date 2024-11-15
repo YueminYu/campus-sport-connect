@@ -1,8 +1,3 @@
-
-
-
-
-
 {% extends 'base.html' %}
 
 {% block title %}Create Event - Campus Sports Connect{% endblock %}
@@ -17,8 +12,26 @@
             {{ form.sport_type(class="form-control") }}
         </div>
         <div class="mb-3">
-            {{ form.date.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.date(class="form-control") }}
+            <label for="date" class="form-label" style="color: #00274C; font-weight: bold;">Date</label>
+            <input
+                type="date"
+                id="date"
+                name="date"
+                class="form-control"
+                min="{{ (now.strftime('%Y-%m-%d')) }}" 
+                required
+            >
+        </div>
+        
+        <div class="mb-3">
+            <label for="time" class="form-label" style="color: #00274C; font-weight: bold;">Time</label>
+            <input
+                type="time"
+                id="time"
+                name="time"
+                class="form-control"
+                required
+            >
         </div>
         <div class="mb-3">
             {{ form.time.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
