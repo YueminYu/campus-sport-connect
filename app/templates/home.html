@@ -20,3 +20,44 @@
     <script>window.location.href = "{{ redirect_url }}";</script>
 {% endif %}
 {% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <!-- Intro Section -->
+    <section class="intro-section">
+        <h1 class="display-4 text-gradient mb-4">Campus Sports Connect</h1>
+        <p class="lead text-muted">Connecting University of Illinois students for sports activities and team events.</p>
+        <p class="text-light">
+            Campus Sports Connect is a web application that allows students to organize and join sports events on campus. Whether you are looking to gather players for a basketball game, or you want to join a soccer match, our app makes it easy to connect with fellow students who share your interests and schedules.
+        </p>
+    </section>
+
+    <!-- Prospect Section -->
+    <section class="prospect-section mt-5">
+        <h2 class="text-gradient mb-3">Project Prospect</h2>
+        <p class="text-light mb-4">
+            Our platform fosters a vibrant sports community at UIUC by offering an intuitive platform for event creation, discovery, and participation. Through Campus Sports Connect, students can stay active, meet new friends, and enjoy organized sports events seamlessly.
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <h5 class="text-primary">Key Features</h5>
+                <ul class="list-unstyled text-light">
+                    <li>⚽ Event Creation and Management</li>
+                    <li>📲 Personalized Notifications</li>
+                    <li>🔍 Event Discovery and Filters</li>
+                    <li>👤 Profile and Preferences</li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h5 class="text-primary">Future Goals</h5>
+                <ul class="list-unstyled text-light">
+                    <li>📧 Advanced Notification System</li>
+                    <li>🚀 Mobile Responsiveness</li>
+                    <li>🔐 Enhanced Security and Validation</li>
+                    <li>💬 Real-time Chat for Event Coordination</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
