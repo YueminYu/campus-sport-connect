@@ -1,8 +1,9 @@
+
 from flask_wtf import FlaskForm
 from wtforms import (
-    StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField
+    StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField, SelectField
 )
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Regexp 
 from flask_wtf.file import FileAllowed
 from datetime import datetime
 from wtforms.fields import DateField, TimeField
@@ -53,7 +54,7 @@ class LoginForm(FlaskForm):
     )
     submit = SubmitField('Login')
 
-
+from wtforms.validators import NumberRange
 class CreateEventForm(FlaskForm):
     """Form for creating a new event."""
     sport_type = StringField(
@@ -105,6 +106,14 @@ class EditProfileForm(FlaskForm):
     email = StringField(
         'Email', validators=[DataRequired(), Email()]
     )
+    telephone = StringField(
+        'Telephone Number',
+        validators=[
+            DataRequired(),
+            Regexp(r'^\+?[1-9]\d{1,14}$', message="Please enter a valid phone number."),
+        ],
+    )
+
     avatar = FileField('Upload Avatar', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     # Sports Interests as Boolean Fields
     basketball = BooleanField('Basketball')

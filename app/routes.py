@@ -102,7 +102,21 @@ def logout():
 
 
 
+# from datetime import datetime
+# @main_routes.route('/create_event', methods=['GET', 'POST'])
+# @login_required
+# def create_event():
+#     form = CreateEventForm()
+#     if form.validate_on_submit():
+#         # Process form submission
+#         flash('Event created successfully!', 'success')
+#         return redirect(url_for('main_routes.view_all_events'))
+
+#     return render_template('create_event.html', form=form, now=datetime.now())
+
+
 from datetime import datetime
+
 
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
@@ -159,6 +173,7 @@ def edit_profile():
         current_user.preferred_sport = ', '.join(sports_selected)
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.telephone = form.telephone.data 
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('main_routes.profile'))
@@ -166,6 +181,7 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        # form.telephone.data = current_user.telephone  
         form.basketball.data = 'Basketball' in (current_user.preferred_sport or '')
         form.football.data = 'Football' in (current_user.preferred_sport or '')
         form.soccer.data = 'Soccer' in (current_user.preferred_sport or '')
