@@ -11,6 +11,10 @@
             {{ form.sport_type.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.sport_type(class="form-control") }}
         </div>
+        <!-- <div class="mb-3">
+            {{ form.date.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.date(class="form-control") }}
+        </div> -->
         <div class="mb-3">
             <label for="date" class="form-label" style="color: #00274C; font-weight: bold;">Date</label>
             <input
@@ -23,6 +27,11 @@
             >
         </div>
         
+        <!-- <div class="mb-3">
+            {{ form.time.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
+            {{ form.time(class="form-control") }}
+        </div> -->
+        
         <div class="mb-3">
             <label for="time" class="form-label" style="color: #00274C; font-weight: bold;">Time</label>
             <input
@@ -33,10 +42,8 @@
                 required
             >
         </div>
-        <div class="mb-3">
-            {{ form.time.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.time(class="form-control") }}
-        </div>
+        
+
         <div class="mb-3">
             {{ form.location.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.location(class="form-control") }}
@@ -49,7 +56,7 @@
         <!-- Background Selection Dropdown -->
         <div class="mb-3">
             <label for="backgroundSelect" class="form-label" style="color: #00274C; font-weight: bold;">Select Background</label>
-            <select id="backgroundSelect" class="form-control">
+            <select id="backgroundSelect" name="background" class="form-control">
                 <option value="background.png">Default</option>
                 <option value="badminton_court.png">Badminton Court</option>
                 <option value="football_court.png">Football Court</option>
@@ -66,13 +73,10 @@
     </div>
 </div>
 
-
-
-
 <script>
-    // Add an event listener to the submit button
+    // Add an event listener to the submit button to save the background selection
     document.querySelector("form").addEventListener("submit", function(event) {
-        const eventName = document.querySelector("#form-sport_type").value; // Assumes sport_type is unique per event
+        const eventName = document.querySelector("#form-sport_type").value;
         const selectedBackground = document.getElementById("backgroundSelect").value;
 
         if (eventName) {
@@ -80,6 +84,5 @@
         }
     });
 </script>
-
 
 {% endblock %}

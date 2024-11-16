@@ -12,8 +12,8 @@ if __name__ == "__main__" and __package__ is None:
     from app import create_app, db
     from app.models import User, Event
 else:
-    from ..app import create_app, db
-    from ..app.models import User, Event
+    from app import create_app, db
+    from app.models import User, Event
 
 class TestRoutes(unittest.TestCase):
 
