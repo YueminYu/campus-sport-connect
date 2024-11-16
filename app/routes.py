@@ -5,7 +5,7 @@ Routes module defining all application routes and their handlers.
 import os
 import uuid
 from flask import (
-    Blueprint, render_template, redirect, url_for, flash, request, current_app
+    Blueprint, render_template, redirect, url_for, flash, request, current_app, session
 )
 from flask_login import (
     login_user, logout_user, login_required, current_user
@@ -41,18 +41,22 @@ def home():
 @main_routes.route('/join_event/<int:event_id>', methods=['POST'])
 @login_required
 def join_event(event_id):
-    """Allow a user to join an event if they are not the organizer."""
+    """Allow a user to join an event if they are not the organizer and if the event isn't full."""
     event = Event.query.get_or_404(event_id)
     if event.user_id != current_user.id:
         if current_user not in event.participants:
-            event.participants.append(current_user)
-            db.session.commit()
-            flash("You have joined the event!", "success")
+            if event.current_participants_count < event.max_participants:
+                event.participants.append(current_user)
+                db.session.commit()
+                flash("You have joined the event!", "success")
+            else:
+                flash("The event is full. You cannot join.", "warning")
         else:
             flash("You are already part of this event!", "info")
     else:
         flash("You cannot join your own event.", "warning")
     return redirect(url_for('main_routes.view_all_events'))
+
 
 @main_routes.route('/register', methods=['GET', 'POST'])
 def register():
@@ -113,6 +117,7 @@ def logout():
 
 from datetime import datetime
 
+
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
@@ -120,19 +125,19 @@ def create_event():
     if form.validate_on_submit():
         event = Event(
             sport_type=form.sport_type.data,
-            date=form.date.data.strftime('%Y-%m-%d'),  # Ensure date is a string
-            time=form.time.data.strftime('%H:%M:%S'),  # Convert time to string
+            date=form.date.data.strftime('%Y-%m-%d'),  
+            time=form.time.data.strftime('%H:%M:%S'), 
             location=form.location.data,
             max_participants=form.max_participants.data,
-            user_id=current_user.id
+            user_id=current_user.id,
+            background_image=form.background_image.data  # Add background image to the new event
         )
         event.participants.append(current_user)  # Add the creator as a participant
         db.session.add(event)
         db.session.commit()
         flash('Event created successfully!', 'success')
         return redirect(url_for('main_routes.view_all_events'))
-    return render_template('create_event.html', form=form, now=datetime.now())
-
+    return render_template('create_event.html', form=form)
 
 
 @main_routes.route('/profile')
@@ -234,6 +239,9 @@ def delete_event(event_id):
 
     return redirect(url_for('main_routes.view_all_events'))
 
+
+from datetime import datetime
+
 @main_routes.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def edit_event(event_id):
@@ -243,18 +251,38 @@ def edit_event(event_id):
         flash('You are not authorized to edit this event.', 'danger')
         return redirect(url_for('main_routes.view_my_events'))
 
-    form = CreateEventForm(obj=event)
+    form = CreateEventForm()
+
+    # Populate the form with current event details when the request is GET
+    if request.method == 'GET':
+        try:
+            event_date = datetime.strptime(event.date, '%Y-%m-%d').date()
+            event_time = datetime.strptime(event.time, '%H:%M:%S').time()
+
+            form.sport_type.data = event.sport_type
+            form.date.data = event_date
+            form.time.data = event_time
+            form.location.data = event.location
+            form.max_participants.data = event.max_participants
+            form.background_image.data = event.background_image
+        except ValueError:
+            flash("Error in parsing event date or time.", "danger")
+
+    # Update event details from the form on form submission (POST)
     if form.validate_on_submit():
         event.sport_type = form.sport_type.data
-        event.date = form.date.data
-        event.time = form.time.data
+        event.date = form.date.data.strftime('%Y-%m-%d')
+        event.time = form.time.data.strftime('%H:%M:%S')
         event.location = form.location.data
         event.max_participants = form.max_participants.data
+        event.background_image = form.background_image.data
         db.session.commit()
         flash('Event updated successfully!', 'success')
-        return redirect(url_for('main_routes.view_my_events'))
+        return redirect(url_for('main_routes.view_all_events'))
 
     return render_template('edit_event.html', form=form, event=event)
+
+
 
 @main_routes.route('/user/<int:user_id>')
 @login_required

@@ -36,6 +36,27 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.password, password)
 
 
+# class Event(db.Model):
+#     """Model for storing event information."""
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     sport_type = db.Column(db.String(50), nullable=False)
+#     date = db.Column(db.String(20), nullable=False)  # Already a string
+#     time = db.Column(db.String(20), nullable=False)  # Change this to string
+#     location = db.Column(db.String(100), nullable=False)
+#     max_participants = db.Column(db.Integer, nullable=False)
+#     current_participants = db.Column(db.Integer, default=0)
+
+#     # Relationship to link Event with its creator
+#     creator = db.relationship('User', back_populates='events')
+
+#     # Relationship to link Event with participants
+#     participants = db.relationship('User', secondary=participants, back_populates='joined_events')
+
+#     @property
+#     def current_participants_count(self):
+#         return len(self.participants)
+
 class Event(db.Model):
     """Model for storing event information."""
     id = db.Column(db.Integer, primary_key=True)
@@ -46,6 +67,7 @@ class Event(db.Model):
     location = db.Column(db.String(100), nullable=False)
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
+    background_image = db.Column(db.String(100), nullable=True)  # Add background image here
 
     # Relationship to link Event with its creator
     creator = db.relationship('User', back_populates='events')
@@ -56,3 +78,4 @@ class Event(db.Model):
     @property
     def current_participants_count(self):
         return len(self.participants)
+

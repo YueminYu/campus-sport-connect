@@ -7,6 +7,11 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationE
 from flask_wtf.file import FileAllowed
 from datetime import datetime
 from wtforms.fields import DateField, TimeField
+from wtforms import ValidationError
+from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField, SubmitField, SelectField
+from wtforms.validators import DataRequired
 
 class RegistrationForm(FlaskForm):
     """Form for user registration."""
@@ -65,13 +70,19 @@ class CreateEventForm(FlaskForm):
         'Location', validators=[DataRequired()]
     )
     max_participants = IntegerField(
-        'Max Participants',
-        validators=[
-            DataRequired(),
-            NumberRange(min=1, message="Participants must be at least 1.")
-        ]
+        'Max Participants', validators=[DataRequired()]
     )
-    background_image = StringField('Background Image', validators=[DataRequired()])
+    background_image = SelectField(
+        'Background Image', 
+        choices=[
+            ('background.png', 'Default'), 
+            ('badminton_court.png', 'Badminton Court'),
+            ('football_court.png', 'Football Court'),
+            ('soccer_court.png', 'Soccer Court')
+        ],
+        validators=[DataRequired()]
+    )
+
     submit = SubmitField('Create Event')
 
     def validate_date(form, field):
@@ -81,9 +92,10 @@ class CreateEventForm(FlaskForm):
 
     def validate_time(form, field):
         """Optional: Custom validation for time."""
-        # Example: Ensure events aren't created outside of specific hours
         if field.data and (field.data.hour < 8 or field.data.hour > 22):
             raise ValidationError("Time must be between 08:00 and 22:00.")
+
+
 
 
 class EditProfileForm(FlaskForm):
