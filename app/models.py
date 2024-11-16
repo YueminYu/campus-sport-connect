@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    # telephone = db.Column(db.String(15), nullable=True)  
     password = db.Column(db.String(60), nullable=False)
     preferred_sport = db.Column(db.String(200), nullable=True)
     avatar = db.Column(db.String(120), nullable=True)
@@ -40,8 +41,8 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     sport_type = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(20), nullable=False)
-    time = db.Column(db.String(20), nullable=False)
+    date = db.Column(db.String(20), nullable=False)  # Already a string
+    time = db.Column(db.String(20), nullable=False)  # Change this to string
     location = db.Column(db.String(100), nullable=False)
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
@@ -51,7 +52,7 @@ class Event(db.Model):
 
     # Relationship to link Event with participants
     participants = db.relationship('User', secondary=participants, back_populates='joined_events')
-    
+
     @property
     def current_participants_count(self):
         return len(self.participants)

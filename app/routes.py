@@ -98,16 +98,39 @@ def logout():
 
 
 
+# from datetime import datetime
+# @main_routes.route('/create_event', methods=['GET', 'POST'])
+# @login_required
+# def create_event():
+#     form = CreateEventForm()
+#     if form.validate_on_submit():
+#         # Process form submission
+#         flash('Event created successfully!', 'success')
+#         return redirect(url_for('main_routes.view_all_events'))
+
+#     return render_template('create_event.html', form=form, now=datetime.now())
+
+
 from datetime import datetime
+
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
-        # Process form submission
+        event = Event(
+            sport_type=form.sport_type.data,
+            date=form.date.data.strftime('%Y-%m-%d'),  # Ensure date is a string
+            time=form.time.data.strftime('%H:%M:%S'),  # Convert time to string
+            location=form.location.data,
+            max_participants=form.max_participants.data,
+            user_id=current_user.id
+        )
+        event.participants.append(current_user)  # Add the creator as a participant
+        db.session.add(event)
+        db.session.commit()
         flash('Event created successfully!', 'success')
         return redirect(url_for('main_routes.view_all_events'))
-
     return render_template('create_event.html', form=form, now=datetime.now())
 
 
@@ -145,6 +168,7 @@ def edit_profile():
         current_user.preferred_sport = ', '.join(sports_selected)
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.telephone = form.telephone.data 
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('main_routes.profile'))
@@ -152,6 +176,7 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        # form.telephone.data = current_user.telephone  
         form.basketball.data = 'Basketball' in (current_user.preferred_sport or '')
         form.football.data = 'Football' in (current_user.preferred_sport or '')
         form.soccer.data = 'Soccer' in (current_user.preferred_sport or '')

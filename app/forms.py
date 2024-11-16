@@ -1,16 +1,12 @@
+
 from flask_wtf import FlaskForm
 from wtforms import (
-    StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField
+    StringField, PasswordField, SubmitField, BooleanField, IntegerField, FileField, SelectField
 )
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Regexp 
 from flask_wtf.file import FileAllowed
 from datetime import datetime
 from wtforms.fields import DateField, TimeField
-from wtforms import ValidationError
-from datetime import datetime
-from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField
-from wtforms.validators import DataRequired
 
 class RegistrationForm(FlaskForm):
     """Form for user registration."""
@@ -53,7 +49,7 @@ class LoginForm(FlaskForm):
     )
     submit = SubmitField('Login')
 
-
+from wtforms.validators import NumberRange
 class CreateEventForm(FlaskForm):
     """Form for creating a new event."""
     sport_type = StringField(
@@ -69,8 +65,13 @@ class CreateEventForm(FlaskForm):
         'Location', validators=[DataRequired()]
     )
     max_participants = IntegerField(
-        'Max Participants', validators=[DataRequired()]
+        'Max Participants',
+        validators=[
+            DataRequired(),
+            NumberRange(min=1, message="Participants must be at least 1.")
+        ]
     )
+    background_image = StringField('Background Image', validators=[DataRequired()])
     submit = SubmitField('Create Event')
 
     def validate_date(form, field):
@@ -84,6 +85,7 @@ class CreateEventForm(FlaskForm):
         if field.data and (field.data.hour < 8 or field.data.hour > 22):
             raise ValidationError("Time must be between 08:00 and 22:00.")
 
+
 class EditProfileForm(FlaskForm):
     """Form for editing user profile."""
     username = StringField(
@@ -92,6 +94,14 @@ class EditProfileForm(FlaskForm):
     email = StringField(
         'Email', validators=[DataRequired(), Email()]
     )
+    telephone = StringField(
+        'Telephone Number',
+        validators=[
+            DataRequired(),
+            Regexp(r'^\+?[1-9]\d{1,14}$', message="Please enter a valid phone number."),
+        ],
+    )
+
     avatar = FileField('Upload Avatar', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     # Sports Interests as Boolean Fields
     basketball = BooleanField('Basketball')

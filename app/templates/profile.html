@@ -15,7 +15,18 @@
         <div class="profile-details">
             <h3 style="color: #00274C;">{{ current_user.username }}</h3>
             <p style="color: #000;"><strong>Email:</strong> {{ current_user.email }}</p>
-            <p style="color: #000;"><strong>Sports Interested:</strong> {{ current_user.preferred_sport }}</p>
+            
+            {% if current_user.telephone %}
+                <p style="color: #000;"><strong>Telephone:</strong> {{ current_user.telephone }}</p>
+            {% else %}
+                <p style="color: #000;"><strong>Telephone:</strong> <em>Not provided</em></p>
+            {% endif %}
+            
+            {% if current_user.preferred_sport %}
+                <p style="color: #000;"><strong>Sports Interested:</strong> {{ current_user.preferred_sport }}</p>
+            {% else %}
+                <p style="color: #000;"><strong>Sports Interested:</strong> <em>Not specified</em></p>
+            {% endif %}
         </div>
     </div>
 
