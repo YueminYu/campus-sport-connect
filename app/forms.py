@@ -70,7 +70,7 @@ class CreateEventForm(FlaskForm):
         'Location', validators=[DataRequired()]
     )
     max_participants = IntegerField(
-        'Max Participants', validators=[DataRequired()]
+        'Max Participants', validators=[DataRequired(), NumberRange(min=1, message="Max participants must be at least 1.")]
     )
     background_image = SelectField(
         'Background Image', 
