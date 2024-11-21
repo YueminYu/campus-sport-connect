@@ -15,13 +15,29 @@
     </div>
 
     <div class="mt-3">
-        <h4 class="text-center">{{ user.username }}</h4>
-        <p class="text-center" style="color: #666;">{{ user.email }}</p>
-        
-        {% if user.preferred_sport %}
-            <p class="text-center"><strong>Preferred Sports:</strong> {{ user.preferred_sport }}</p>
+        <h4 class="text-center" style="color: #000;">{{ user.username }}</h4>
+
+        <!-- Display email -->
+        <p class="text-center" style="color: #000;">
+            <strong>Email:</strong> {{ user.email }}
+        </p>
+
+        <!-- Display telephone number -->
+        {% if user.telephone %}
+            <p class="text-center" style="color: #000;">
+                <strong>Telephone Number:</strong> {{ user.telephone }}
+            </p>
         {% else %}
-            <p class="text-center"><em>No preferred sports listed.</em></p>
+            <p class="text-center" style="color: #000;">
+                <strong>Telephone Number:</strong> Not provided
+            </p>
+        {% endif %}
+
+        <!-- Display preferred sports -->
+        {% if user.preferred_sport %}
+            <p class="text-center" style="color: #000;"><strong>Preferred Sports:</strong> {{ user.preferred_sport }}</p>
+        {% else %}
+            <p class="text-center" style="color: #000;"><em>No preferred sports listed.</em></p>
         {% endif %}
     </div>
 </div>

@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    # telephone = db.Column(db.String(15), nullable=True)  
+    telephone = db.Column(db.String(15), nullable=True)  
     password = db.Column(db.String(60), nullable=False)
     preferred_sport = db.Column(db.String(200), nullable=True)
     avatar = db.Column(db.String(120), nullable=True)
@@ -36,26 +36,7 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.password, password)
 
 
-# class Event(db.Model):
-#     """Model for storing event information."""
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     sport_type = db.Column(db.String(50), nullable=False)
-#     date = db.Column(db.String(20), nullable=False)  # Already a string
-#     time = db.Column(db.String(20), nullable=False)  # Change this to string
-#     location = db.Column(db.String(100), nullable=False)
-#     max_participants = db.Column(db.Integer, nullable=False)
-#     current_participants = db.Column(db.Integer, default=0)
 
-#     # Relationship to link Event with its creator
-#     creator = db.relationship('User', back_populates='events')
-
-#     # Relationship to link Event with participants
-#     participants = db.relationship('User', secondary=participants, back_populates='joined_events')
-
-#     @property
-#     def current_participants_count(self):
-#         return len(self.participants)
 
 class Event(db.Model):
     """Model for storing event information."""
@@ -68,6 +49,7 @@ class Event(db.Model):
     max_participants = db.Column(db.Integer, nullable=False)
     current_participants = db.Column(db.Integer, default=0)
     background_image = db.Column(db.String(100), nullable=True)  # Add background image here
+    telephone = db.Column(db.String(15), nullable=True)  # Add this line for the telephone field
 
     # Relationship to link Event with its creator
     creator = db.relationship('User', back_populates='events')

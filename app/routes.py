@@ -78,7 +78,11 @@ def register():
         user = User(
             username=form.username.data,
             email=form.email.data,
-            password=hashed_password
+            telephone=form.telephone.data,  # Save telephone number
+            password=hashed_password,
+            preferred_sport=', '.join(
+                [sport for sport in ['Basketball', 'Football', 'Soccer', 'Badminton'] if getattr(form, sport.lower()).data]
+            )
         )
         db.session.add(user)
         db.session.commit()
@@ -166,6 +170,11 @@ def edit_profile():
             avatar_path = os.path.join(avatar_dir, avatar_filename)
             form.avatar.data.save(avatar_path)
             current_user.avatar = f'uploads/avatars/{avatar_filename}'
+        
+        # Update user information, including telephone
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.telephone = form.telephone.data  # Save the telephone number
 
         sports_selected = []
         if form.basketball.data:
@@ -178,9 +187,9 @@ def edit_profile():
             sports_selected.append('Badminton')
 
         current_user.preferred_sport = ', '.join(sports_selected)
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        current_user.telephone = form.telephone.data 
+        # current_user.username = form.username.data
+        # current_user.email = form.email.data
+        # current_user.telephone = form.telephone.data 
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('main_routes.profile'))
@@ -188,7 +197,7 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-        # form.telephone.data = current_user.telephone  
+        form.telephone.data = current_user.telephone  
         form.basketball.data = 'Basketball' in (current_user.preferred_sport or '')
         form.football.data = 'Football' in (current_user.preferred_sport or '')
         form.soccer.data = 'Soccer' in (current_user.preferred_sport or '')
