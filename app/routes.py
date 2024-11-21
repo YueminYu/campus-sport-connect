@@ -17,9 +17,10 @@ from .forms import (
     RegistrationForm, LoginForm, CreateEventForm, 
     EditProfileForm, ChangePasswordForm
 )
+from datetime import datetime, timedelta
+import pytz
 
 main_routes = Blueprint('main_routes', __name__)
-
 
 
 
@@ -43,20 +44,27 @@ def home():
 def join_event(event_id):
     """Allow a user to join an event if they are not the organizer and if the event isn't full."""
     event = Event.query.get_or_404(event_id)
-    if event.user_id != current_user.id:
-        if current_user not in event.participants:
-            if event.current_participants_count < event.max_participants:
-                event.participants.append(current_user)
-                db.session.commit()
-                flash("You have joined the event!", "success")
-            else:
-                flash("The event is full. You cannot join.", "warning")
-        else:
-            flash("You are already part of this event!", "info")
-    else:
+    
+    # Check if the user is not the organizer
+    if event.user_id == current_user.id:
         flash("You cannot join your own event.", "warning")
-    return redirect(url_for('main_routes.view_all_events'))
+        return redirect(url_for('main_routes.view_all_events'))
 
+    # Check if the user is already a participant
+    if current_user in event.participants:
+        flash("You are already part of this event!", "info")
+        return redirect(url_for('main_routes.view_all_events'))
+
+    # Check if the event is full
+    if event.current_participants_count >= event.max_participants:
+        flash("The event is full. You cannot join.", "warning")
+    else:
+        # Add the user to the participants list
+        event.participants.append(current_user)
+        db.session.commit()
+        flash("You have joined the event!", "success")
+    
+    return redirect(url_for('main_routes.view_all_events'))
 
 @main_routes.route('/register', methods=['GET', 'POST'])
 def register():
@@ -102,27 +110,19 @@ def logout():
 
 
 
-# from datetime import datetime
-# @main_routes.route('/create_event', methods=['GET', 'POST'])
-# @login_required
-# def create_event():
-#     form = CreateEventForm()
-#     if form.validate_on_submit():
-#         # Process form submission
-#         flash('Event created successfully!', 'success')
-#         return redirect(url_for('main_routes.view_all_events'))
-
-#     return render_template('create_event.html', form=form, now=datetime.now())
-
-
 from datetime import datetime
-
 
 @main_routes.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
+        # Ensure that max_participants is greater than or equal to 1
+        if form.max_participants.data < 1:
+            flash('Max participants must be at least 1.', 'danger')
+            return render_template('create_event.html', form=form)
+
+        # Create the event instance
         event = Event(
             sport_type=form.sport_type.data,
             date=form.date.data.strftime('%Y-%m-%d'),  
@@ -130,13 +130,20 @@ def create_event():
             location=form.location.data,
             max_participants=form.max_participants.data,
             user_id=current_user.id,
-            background_image=form.background_image.data  # Add background image to the new event
+            background_image=form.background_image.data
         )
-        event.participants.append(current_user)  # Add the creator as a participant
+        # Add the creator as a participant if there is space available
+        if event.current_participants_count < event.max_participants:
+            event.participants.append(current_user)
+        else:
+            flash('Event is full, cannot add creator as participant.', 'danger')
+            return render_template('create_event.html', form=form)
+
         db.session.add(event)
         db.session.commit()
         flash('Event created successfully!', 'success')
         return redirect(url_for('main_routes.view_all_events'))
+    
     return render_template('create_event.html', form=form)
 
 
@@ -189,19 +196,66 @@ def edit_profile():
 
     return render_template('edit_profile.html', form=form)
 
+def parse_date(date_string):
+    """Attempt to parse a date string with multiple possible formats."""
+    for fmt in ('%Y-%m-%d', '%Y/%m/%d'):
+        try:
+            return datetime.strptime(date_string, fmt)
+        except ValueError:
+            continue
+    # If the date string cannot be parsed, return None
+    return None
+
 @main_routes.route('/view_my_events', methods=['GET'])
 @login_required
 def view_my_events():
     """Display events created by the logged-in user."""
-    events = Event.query.filter_by(user_id=current_user.id).all()
-    return render_template('view_my_events.html', events=events)
+    # Get the current time as a naive datetime
+    central_tz = pytz.timezone('America/Chicago')
+    now = datetime.now(central_tz).replace(tzinfo=None)
+
+    # Get all events created by the current user
+    all_events = Event.query.filter_by(user_id=current_user.id).all()
+
+    # Split events into upcoming and past based on the current time
+    upcoming_events = []
+    past_events = []
+
+    for event in all_events:
+        event_date = parse_date(event.date)
+        if event_date:
+            if event_date > now:
+                upcoming_events.append(event)
+            else:
+                past_events.append(event)
+
+    return render_template('view_my_events.html', upcoming_events=upcoming_events, past_events=past_events)
+
 
 @main_routes.route('/view_all_events', methods=['GET'])
 @login_required
 def view_all_events():
     """Display all events in the system."""
-    events = Event.query.all()
-    return render_template('view_all_events.html', events=events)
+    # Get the current time as a naive datetime
+    central_tz = pytz.timezone('America/Chicago')
+    now = datetime.now(central_tz).replace(tzinfo=None)
+
+    # Get all events in the database
+    all_events = Event.query.all()
+
+    # Split events into upcoming and past based on the current time
+    upcoming_events = []
+    past_events = []
+
+    for event in all_events:
+        event_date = parse_date(event.date)
+        if event_date:
+            if event_date > now:
+                upcoming_events.append(event)
+            else:
+                past_events.append(event)
+
+    return render_template('view_all_events.html', upcoming_events=upcoming_events, past_events=past_events)
 
 @main_routes.route('/change_password', methods=['GET', 'POST'])
 @login_required
@@ -241,16 +295,18 @@ def delete_event(event_id):
 
 
 from datetime import datetime
-
 @main_routes.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def edit_event(event_id):
     """Edit an event if the logged-in user is the organizer."""
     event = Event.query.get_or_404(event_id)
+    
+    # Ensure only the event owner can access the edit page
     if event.user_id != current_user.id:
         flash('You are not authorized to edit this event.', 'danger')
         return redirect(url_for('main_routes.view_my_events'))
 
+    # Create the form object, prepopulate fields with event data
     form = CreateEventForm()
 
     # Populate the form with current event details when the request is GET
@@ -270,15 +326,28 @@ def edit_event(event_id):
 
     # Update event details from the form on form submission (POST)
     if form.validate_on_submit():
-        event.sport_type = form.sport_type.data
-        event.date = form.date.data.strftime('%Y-%m-%d')
-        event.time = form.time.data.strftime('%H:%M:%S')
-        event.location = form.location.data
-        event.max_participants = form.max_participants.data
-        event.background_image = form.background_image.data
-        db.session.commit()
-        flash('Event updated successfully!', 'success')
-        return redirect(url_for('main_routes.view_all_events'))
+        print("Form submitted and valid.")
+        try:
+            # Update event details
+            event.sport_type = form.sport_type.data
+            event.date = form.date.data.strftime('%Y-%m-%d')  # Update with formatted date
+            event.time = form.time.data.strftime('%H:%M:%S')  # Update with formatted time
+            event.location = form.location.data
+            event.max_participants = form.max_participants.data
+            event.background_image = form.background_image.data
+
+            # Commit the changes to the database
+            db.session.commit()
+            flash('Event updated successfully!', 'success')
+            return redirect(url_for('main_routes.view_all_events'))
+        except Exception as e:
+            db.session.rollback()
+            print("Error updating event:", e)
+            flash("An error occurred while updating the event. Please try again.", 'danger')
+    else:
+        # If form validation fails, print the errors
+        if form.errors:
+            print("Form validation failed. Errors:", form.errors)
 
     return render_template('edit_event.html', form=form, event=event)
 
