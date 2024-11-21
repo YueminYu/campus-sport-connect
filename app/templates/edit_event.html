@@ -11,26 +11,44 @@
         <div class="mb-3">
             {{ form.sport_type.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.sport_type(class="form-control") }}
+            {% if form.sport_type.errors %}
+                <div class="text-danger">{{ form.sport_type.errors[0] }}</div>
+            {% endif %}
         </div>
         <div class="mb-3">
             {{ form.date.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.date(class="form-control", type="date") }}
+            {% if form.date.errors %}
+                <div class="text-danger">{{ form.date.errors[0] }}</div>
+            {% endif %}
         </div>
         <div class="mb-3">
             {{ form.time.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.time(class="form-control", type="time") }}
+            {% if form.time.errors %}
+                <div class="text-danger">{{ form.time.errors[0] }}</div>
+            {% endif %}
         </div>
         <div class="mb-3">
             {{ form.location.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.location(class="form-control") }}
+            {% if form.location.errors %}
+                <div class="text-danger">{{ form.location.errors[0] }}</div>
+            {% endif %}
         </div>
         <div class="mb-3">
             {{ form.max_participants.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.max_participants(class="form-control") }}
+            {% if form.max_participants.errors %}
+                <div class="text-danger">{{ form.max_participants.errors[0] }}</div>
+            {% endif %}
         </div>
         <div class="mb-3">
             {{ form.background_image.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
             {{ form.background_image(class="form-control") }}
+            {% if form.background_image.errors %}
+                <div class="text-danger">{{ form.background_image.errors[0] }}</div>
+            {% endif %}
         </div>
         <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Save Changes</button>
     </form>
