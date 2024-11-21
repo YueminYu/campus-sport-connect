@@ -8,39 +8,45 @@
         <h2 class="text-center mb-4" style="color: #00274C;">Sign Up</h2>
         <form method="POST" action="{{ url_for('main_routes.register') }}">
             {{ form.hidden_tag() }}
-    
+
             <div class="form-group mb-3">
                 {{ form.first_name.label(class="form-label", style="color: #333;") }}
                 {{ form.first_name(class="form-control", style="color: #333;") }}
             </div>
-    
+
             <div class="form-group mb-3">
                 {{ form.last_name.label(class="form-label", style="color: #333;") }}
                 {{ form.last_name(class="form-control", style="color: #333;") }}
             </div>
-    
+
             <div class="form-group mb-3">
                 {{ form.username.label(class="form-label", style="color: #333;") }}
                 {{ form.username(class="form-control", style="color: #333;") }}
             </div>
-    
+
             <div class="form-group mb-3">
                 {{ form.email.label(class="form-label", style="color: #333;") }}
                 {{ form.email(class="form-control", style="color: #333;") }}
             </div>
-    
+
+            <!-- Add Telephone Number Field -->
+            <div class="form-group mb-3">
+                {{ form.telephone.label(class="form-label", style="color: #333;") }}
+                {{ form.telephone(class="form-control", style="color: #333;") }}
+            </div>
+
             <div class="form-group mb-3">
                 {{ form.password.label(class="form-label", style="color: #333;") }}
                 {{ form.password(class="form-control", style="color: #333;") }}
             </div>
-    
+
             <div class="form-group mb-3">
                 {{ form.confirm_password.label(class="form-label", style="color: #333;") }}
                 {{ form.confirm_password(class="form-control", style="color: #333;") }}
             </div>
-    
+
             <h4 class="text-center mt-4" style="color: #00274C;">Select Your Favorite Sports</h4>
-    
+
             <div class="sports-selection d-flex justify-content-around mt-3">
                 <div class="sports-option text-center">
                     <label for="basketball" style="position: relative;">
@@ -49,7 +55,7 @@
                     </label>
                     <span class="sports-label" style="color: #333;">Basketball</span>
                 </div>
-            
+
                 <div class="sports-option text-center">
                     <label for="football" style="position: relative;">
                         <img src="{{ url_for('static', filename='images/football.jpg') }}" alt="Football" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd; border-radius: 8px;">
@@ -57,7 +63,7 @@
                     </label>
                     <span class="sports-label" style="color: #333;">Football</span>
                 </div>
-            
+
                 <div class="sports-option text-center">
                     <label for="soccer" style="position: relative;">
                         <img src="{{ url_for('static', filename='images/soccer.jpg') }}" alt="Soccer" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd; border-radius: 8px;">
@@ -65,7 +71,7 @@
                     </label>
                     <span class="sports-label" style="color: #333;">Soccer</span>
                 </div>
-            
+
                 <div class="sports-option text-center">
                     <label for="badminton" style="position: relative;">
                         <img src="{{ url_for('static', filename='images/badminton.jpg') }}" alt="Badminton" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd; border-radius: 8px;">
@@ -74,8 +80,7 @@
                     <span class="sports-label" style="color: #333;">Badminton</span>
                 </div>
             </div>
-            
-    
+
             <button type="submit" class="btn btn-primary btn-block mt-4">Sign Up</button>
         </form>
     </div>

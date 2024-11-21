@@ -78,7 +78,11 @@ def register():
         user = User(
             username=form.username.data,
             email=form.email.data,
-            password=hashed_password
+            telephone=form.telephone.data,  # Save telephone number
+            password=hashed_password,
+            preferred_sport=', '.join(
+                [sport for sport in ['Basketball', 'Football', 'Soccer', 'Badminton'] if getattr(form, sport.lower()).data]
+            )
         )
         db.session.add(user)
         db.session.commit()
