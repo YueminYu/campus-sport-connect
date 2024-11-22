@@ -81,16 +81,16 @@ class CreateEventForm(FlaskForm):
     max_participants = IntegerField(
         'Max Participants', validators=[DataRequired(), NumberRange(min=1, message="Max participants must be at least 1.")]
     )
-    background_image = SelectField(
-        'Background Image', 
-        choices=[
-            ('background.png', 'Default'), 
-            ('badminton_court.png', 'Badminton Court'),
-            ('football_court.png', 'Football Court'),
-            ('soccer_court.png', 'Soccer Court')
-        ],
-        validators=[DataRequired()]
-    )
+    # background_image = SelectField(
+    #     'Background Image', 
+    #     choices=[
+    #         ('background.png', 'Default'), 
+    #         ('badminton_court.png', 'Badminton Court'),
+    #         ('football_court.png', 'Football Court'),
+    #         ('soccer_court.png', 'Soccer Court')
+    #     ],
+    #     validators=[DataRequired()]
+    # )
 
     submit = SubmitField('Create Event')
 

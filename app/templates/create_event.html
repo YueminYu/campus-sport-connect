@@ -11,7 +11,7 @@
         <!-- Sport Type Field -->
         <div class="mb-3">
             {{ form.sport_type.label(class="form-label", style="color: #00274C; font-weight: bold;") }}
-            {{ form.sport_type(class="form-control") }}
+            {{ form.sport_type(class="form-control", id="sport_type") }}
         </div>
 
         <!-- Date Field -->
@@ -43,17 +43,33 @@
             {{ form.max_participants(class="form-control") }}
         </div>
 
-        <!-- Background Selection Dropdown -->
-        <div class="mb-3">
-            <label for="backgroundSelect" class="form-label" style="color: #00274C; font-weight: bold;">Select Background</label>
-            <select id="backgroundSelect" name="background_image" class="form-control">
-                <option value="background.png">Default</option>
-                <option value="badminton_court.png">Badminton Court</option>
-                <option value="football_court.png">Football Court</option>
-                <option value="soccer_court.png">Soccer Court</option>
-            </select>
-        </div>
+        <!-- Add dynamic background preview -->
+        <div id="background-image" 
+     style="background-image: url('{{ url_for('static', filename='images/default_image.jpg') }}'); 
+            height: 10px; 
+            width: 100%; 
+            margin-bottom: 20px; 
+            border-radius: 10px;">
+</div>
 
+<script>
+document.getElementById('sport_type').addEventListener('change', function() {
+    var sportType = this.value.toLowerCase(); // Convert input to lowercase
+    fetch('/get_sport_image/' + sportType)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('background-image').style.backgroundImage = 'url(' + data.image_url + ')';
+        })
+        .catch(error => {
+            console.error('Error fetching background image:', error);
+        });
+});
+</script>
         <!-- Submit Button -->
         <div class="text-center">
             {{ form.submit(class="btn btn-primary btn-lg") }}
