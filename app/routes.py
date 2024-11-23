@@ -29,6 +29,9 @@ SPORT_BACKGROUND_IMAGES = {
     'badminton': 'badminton_court.png',
     'football': 'football_court.png',
     'soccer': 'soccer_court.png',
+    'volleyball': 'volleyball_court.png',
+    'cricket': 'cricket_court.png',
+    'tennis': 'tennis_court.png',
     # Default option if no match
     'default': 'background.png'
 }
