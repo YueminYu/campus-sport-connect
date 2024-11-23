@@ -5,7 +5,7 @@ Routes module defining all application routes and their handlers.
 import os
 import uuid
 from flask import (
-    Blueprint, render_template, redirect, url_for, flash, request, current_app, session
+    Blueprint, render_template, redirect, url_for, flash, request, current_app, session, jsonify
 )
 from flask_login import (
     login_user, logout_user, login_required, current_user
@@ -25,11 +25,12 @@ main_routes = Blueprint('main_routes', __name__)
 
 
 SPORT_BACKGROUND_IMAGES = {
-    'Badminton': 'images/badminton_court.png',
-    'Football': 'images/football_court.png',
-    'Soccer': 'images/soccer_court.png',
+    'basketball': 'basketball_court.png',
+    'badminton': 'badminton_court.png',
+    'football': 'football_court.png',
+    'soccer': 'soccer_court.png',
     # Default option if no match
-    'default': 'images/background.png'
+    'default': 'background.png'
 }
 
 
@@ -121,6 +122,11 @@ from datetime import datetime
 def create_event():
     form = CreateEventForm()
     if form.validate_on_submit():
+         # Determine background image dynamically
+        background_image = SPORT_BACKGROUND_IMAGES.get(
+            form.sport_type.data.lower(),  # Convert to lowercase for consistency
+            SPORT_BACKGROUND_IMAGES['default']
+        )
         # Ensure that max_participants is greater than or equal to 1
         if form.max_participants.data < 1:
             flash('Max participants must be at least 1.', 'danger')
@@ -134,7 +140,7 @@ def create_event():
             location=form.location.data,
             max_participants=form.max_participants.data,
             user_id=current_user.id,
-            background_image=form.background_image.data
+            background_image=background_image 
         )
         # Add the creator as a participant if there is space available
         if event.current_participants_count < event.max_participants:
@@ -149,6 +155,17 @@ def create_event():
         return redirect(url_for('main_routes.view_all_events'))
     
     return render_template('create_event.html', form=form)
+
+from flask import url_for
+
+@main_routes.route('/get_sport_image/<sport_type>', methods=['GET'])
+def get_sport_image(sport_type):
+    image_filename = SPORT_BACKGROUND_IMAGES.get(
+        sport_type.lower(),
+        SPORT_BACKGROUND_IMAGES['default']
+    )
+    image_url = url_for('static', filename=image_filename)
+    return jsonify({'image_url': image_url})
 
 
 @main_routes.route('/profile')
@@ -304,6 +321,7 @@ def delete_event(event_id):
 
 
 from datetime import datetime
+
 @main_routes.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def edit_event(event_id):
@@ -329,13 +347,12 @@ def edit_event(event_id):
             form.time.data = event_time
             form.location.data = event.location
             form.max_participants.data = event.max_participants
-            form.background_image.data = event.background_image
+            # Remove background_image prepopulation since it is dynamically determined
         except ValueError:
             flash("Error in parsing event date or time.", "danger")
 
     # Update event details from the form on form submission (POST)
     if form.validate_on_submit():
-        print("Form submitted and valid.")
         try:
             # Update event details
             event.sport_type = form.sport_type.data
@@ -343,7 +360,11 @@ def edit_event(event_id):
             event.time = form.time.data.strftime('%H:%M:%S')  # Update with formatted time
             event.location = form.location.data
             event.max_participants = form.max_participants.data
-            event.background_image = form.background_image.data
+            # Dynamically determine background_image
+            event.background_image = SPORT_BACKGROUND_IMAGES.get(
+                form.sport_type.data.lower(),
+                SPORT_BACKGROUND_IMAGES['default']
+            )
 
             # Commit the changes to the database
             db.session.commit()
