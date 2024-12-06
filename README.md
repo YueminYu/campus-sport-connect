@@ -14,4 +14,4 @@ Campus Sports Connect aims to bring students at the University of Illinois Urban
 
 ### Official Website 
 
-to be continued......
+(https://campus-sports-connect.vercel.app/)
