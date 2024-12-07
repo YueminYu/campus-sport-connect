@@ -246,12 +246,29 @@ def view_my_events():
 @main_routes.route('/view_all_events', methods=['GET'])
 @login_required
 def view_all_events():
-    """Display all events in the system."""
+    """Display all events in the system with filters."""
+    # Get the current time as a naive datetime
     central_tz = pytz.timezone('America/Chicago')
     now = datetime.now(central_tz).replace(tzinfo=None)
 
-    all_events = Event.query.all()
+    # Get filter parameters from the request
+    sport_filter = request.args.get('sport_filter', '').strip()
+    hide_past = request.args.get('hide_past') == 'true'
 
+    # Build query with optional filters
+    query = Event.query
+
+    if sport_filter:
+        # Use ilike for case-insensitive filtering
+        query = query.filter(Event.sport_type.ilike(f"%{sport_filter}%"))
+
+    if hide_past:
+        query = query.filter(Event.date >= now.strftime('%Y-%m-%d'))
+
+    # Execute the query and fetch events
+    all_events = query.all()
+
+    # Split events into upcoming and past based on the current time
     upcoming_events = []
     past_events = []
 
@@ -263,7 +280,13 @@ def view_all_events():
             else:
                 past_events.append(event)
 
-    return render_template('view_all_events.html', upcoming_events=upcoming_events, past_events=past_events)
+    return render_template(
+        'view_all_events.html',
+        upcoming_events=upcoming_events,
+        past_events=past_events,
+        selected_sport=sport_filter,
+        hide_past=hide_past,
+    )
 
 
 @main_routes.route('/change_password', methods=['GET', 'POST'])
