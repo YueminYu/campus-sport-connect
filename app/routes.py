@@ -392,3 +392,24 @@ def view_user_profile(user_id):
     """View another user's profile based on their user ID."""
     user = User.query.get_or_404(user_id)
     return render_template('view_profile.html', user=user)
+
+
+@main_routes.route('/kick_participant/<int:event_id>/<int:participant_id>', methods=['POST'])
+@login_required
+def kick_participant(event_id, participant_id):
+    """Remove a participant from an event if the current user is the event creator."""
+    event = Event.query.get_or_404(event_id)
+    participant = User.query.get_or_404(participant_id)
+
+    if event.user_id != current_user.id:
+        flash("You are not authorized to remove participants from this event.", "danger")
+        return redirect(url_for('main_routes.view_all_events'))
+
+    if participant not in event.participants:
+        flash("This user is not a participant of the event.", "warning")
+    else:
+        event.participants.remove(participant)
+        db.session.commit()
+        flash(f"{participant.username} has been removed from the event.", "success")
+
+    return redirect(url_for('main_routes.view_all_events'))
