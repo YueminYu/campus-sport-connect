@@ -24,7 +24,7 @@
                                 <strong>Participants:</strong> {{ event.current_participants_count }}/{{ event.max_participants }}
                             </p>
 
-                            <!-- Updated Participants List (for view_all_events.html and view_my_events.html) -->
+                            <!-- Updated Participants List -->
                             <h6 class="mt-3">Participants:</h6>
                             <div class="participants-list d-flex flex-wrap justify-content-center mt-3">
                                 {% for participant in event.participants %}
@@ -37,6 +37,12 @@
                                             {% endif %}
                                             <p class="mt-2 mb-0" style="font-size: 1.2em; font-weight: bold; color: #00274C;">{{ participant.username }}</p>
                                         </a>
+                                        <!-- Kick participant out button for the event creator -->
+                                        {% if event.user_id == current_user.id and participant.id != current_user.id %}
+                                            <form method="POST" action="{{ url_for('main_routes.kick_participant', event_id=event.id, participant_id=participant.id) }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger mt-2">Remove</button>
+                                            </form>
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
                             </div>
@@ -73,7 +79,7 @@
                                 <strong>Participants:</strong> {{ event.current_participants_count }}/{{ event.max_participants }}
                             </p>
 
-                            <!-- Updated Participants List (for view_all_events.html and view_my_events.html) -->
+                            <!-- Updated Participants List -->
                             <h6 class="mt-3">Participants:</h6>
                             <div class="participants-list d-flex flex-wrap justify-content-center mt-3">
                                 {% for participant in event.participants %}
@@ -90,7 +96,12 @@
                                 {% endfor %}
                             </div>
 
-                            <!-- No Edit/Delete for Past Events -->
+                            <!-- Add delete button for past events -->
+                            <div class="d-flex justify-content-end mt-3">
+                                <form method="POST" action="{{ url_for('main_routes.delete_event', event_id=event.id) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
