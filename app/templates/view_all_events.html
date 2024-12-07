@@ -6,6 +6,30 @@
 <div class="container mt-5">
     <h2 class="text-center text-white mb-4">All Events</h2>
 
+    <!-- Filtering Form -->
+    <div class="container mt-3">
+        <form method="GET" action="{{ url_for('main_routes.view_all_events') }}" class="form-inline justify-content-center">
+            <!-- Sport Filter Dropdown -->
+            <select name="sport_filter" class="form-control mr-2">
+                <option value="" {% if not selected_sport %}selected{% endif %}>All Sports</option>
+                <option value="Basketball" {% if selected_sport.lower() == "basketball" %}selected{% endif %}>Basketball</option>
+                <option value="Football" {% if selected_sport.lower() == "football" %}selected{% endif %}>Football</option>
+                <option value="Soccer" {% if selected_sport.lower() == "soccer" %}selected{% endif %}>Soccer</option>
+                <option value="Tennis" {% if selected_sport.lower() == "tennis" %}selected{% endif %}>Tennis</option>
+                <option value="Cricket" {% if selected_sport.lower() == "cricket" %}selected{% endif %}>Cricket</option>
+                <option value="Volleyball" {% if selected_sport.lower() == "volleyball" %}selected{% endif %}>Volleyball</option>
+            </select>
+
+            <!-- Hide Past Events Toggle -->
+            <label class="mr-2 ml-3">
+                <input type="checkbox" name="hide_past" value="true" {% if hide_past %}checked{% endif %}>
+                Hide Past Events
+            </label>
+
+            <!-- Filter Button -->
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
     <!-- My Upcoming Events Section -->
     <h3 class="text-center text-white mb-3">My Upcoming Events</h3>
     <div class="row">
