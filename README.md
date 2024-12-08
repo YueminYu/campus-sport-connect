@@ -13,6 +13,9 @@ Campus Sports Connect aims to bring students at the University of Illinois Urban
 6. Profile Management: Users can update their profiles, including preferred sports, avatars, and phone numbers.
 7. Database Management: Implemented an SQLite database for user and event data. Manually resolved merge conflicts in binary database files during collaborative development.
 8. Responsive Design: Ensured a user-friendly interface with Bootstrap for a seamless experience across devices.
+   
+### Technical Architecture
+<img width="691" alt="e605deec123b4082f24c513ec007f90" src="https://github.com/user-attachments/assets/5569ee32-e792-4990-9bae-d81c8824861d">
 
 ### Contributions
 Yuemin Yu:
