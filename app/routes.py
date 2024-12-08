@@ -191,6 +191,14 @@ def edit_profile():
             sports_selected.append('Soccer')
         if form.badminton.data:
             sports_selected.append('Badminton')
+        if form.cricket.data:  
+            sports_selected.append('Cricket')
+        if form.tennis.data:  
+            sports_selected.append('Tennis')
+        if form.volleyball.data:  
+            sports_selected.append('Volleyball')
+        if form.table_tennis.data: 
+            sports_selected.append('Table Tennis')
 
         current_user.preferred_sport = ', '.join(sports_selected)
 
@@ -206,6 +214,10 @@ def edit_profile():
         form.football.data = 'Football' in (current_user.preferred_sport or '')
         form.soccer.data = 'Soccer' in (current_user.preferred_sport or '')
         form.badminton.data = 'Badminton' in (current_user.preferred_sport or '')
+        form.cricket.data = 'Cricket' in (current_user.preferred_sport or '')  
+        form.tennis.data = 'Tennis' in (current_user.preferred_sport or '')  
+        form.volleyball.data = 'Volleyball' in (current_user.preferred_sport or '')  
+        form.table_tennis.data = 'Table Tennis' in (current_user.preferred_sport or '')  
 
     return render_template('edit_profile.html', form=form)
 

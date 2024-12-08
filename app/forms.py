@@ -129,6 +129,10 @@ class EditProfileForm(FlaskForm):
     football = BooleanField('Football')
     soccer = BooleanField('Soccer')
     badminton = BooleanField('Badminton')
+    cricket = BooleanField('Cricket') 
+    tennis = BooleanField('Tennis')    
+    volleyball = BooleanField('Volleyball')  
+    table_tennis = BooleanField('Table Tennis')  
 
     submit = SubmitField('Update Profile')
 
